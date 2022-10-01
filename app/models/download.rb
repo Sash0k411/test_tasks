@@ -1,3 +1,3 @@
 class Download < ApplicationRecord
-  belongs_to :song, optional: true
+  belongs_to :song
 end

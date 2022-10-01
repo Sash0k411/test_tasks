@@ -6,22 +6,39 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
-100000.times do |i|
-  artist = Artist.new(name: "Artist № #{i+1}")
-  artist.save!
+rand_char = lambda do
+  ('A'..'Z').to_a.sample
 end
 
-1000000.times do |i|
-  song_params = {
-    title: "Song № #{i+1}",
-    length: "#{i} seconds",
-    filesize: "#{i + 1}"}
-  song = Song.new(song_params)
-  song.save!
+rand_string = lambda do
+  10.times.map { rand_char.call }.join
+end
+
+
+10.times do |i|
+  artist = Artist.create!(
+    name: "#{rand_string.call} № #{i+1}"
+  )
+
+  10.times do |i|
+    song_params = {
+      artist: artist,
+      title: "#{rand_string.call} № #{i+1}",
+      length: "#{i} seconds",
+      filesize: "#{i + 1}"
+    }
+    song = Song.create!(song_params)
+
+    (10..100).to_a.sample.times do |i|
+      download_params = {
+        song: song,
+        created_at: (1..100).to_a.sample.days.ago
+      }
+      Download.create!(download_params)
+    end
   end
-
-
-500000.times do |i|
-  Download.create!(count: i)
 end
+
+
+
 
